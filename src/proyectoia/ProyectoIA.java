@@ -71,7 +71,20 @@ public class ProyectoIA {
         }
         return sol;
     }
-
+    void traceRoute(Vector <Nodo> camino){
+        int size = camino.size();
+        int id = camino.get(size-1).getId();
+         String route="";
+        for (int i = size-1; i >= 0; i--) {
+            if(camino.get(i).getId() == id && camino.get(i).getId()!=0){
+                id=camino.get(i).getParent_id();
+                route=camino.get(i).getMov() +"\n"+route;
+                
+            }
+        }
+        System.out.print(route);
+        
+    }
     /**
      * @param args the command line arguments
      */
@@ -81,7 +94,6 @@ public class ProyectoIA {
         Nodo nod = new Nodo(id, id, false);
         Vector<Nodo> arbol = new Vector();
         Vector<Nodo> hojas = new Vector();
-        Vector<Nodo> pendientes = new Vector();
         hojas.add(nod);
         int maze[][] = {
             {0, 3, 0, 0, 0, 0, 1, 1, 0, 1},
@@ -103,49 +115,59 @@ public class ProyectoIA {
         System.out.println("Initial posicion: (" + aux.init_pos_x + "," + aux.init_pos_y + ")");
         System.out.println("Target posicion: (" + aux.target_pos_x + "," + aux.target_pos_y + ")");
         Boolean flag = true;
-        while (flag) {
-            for (int i = 0; i < hojas.size(); i++) {
-                String moves = aux.find_move(maze, hojas.get(i).getCur_pos_x(), hojas.get(i).getCur_pos_y());
-                if (moves.contains("8")) {
-                    id++;
-                    Nodo new_son = new Nodo(id, hojas.get(i).getId(), false);
-                    new_son.setCur_pos_x(hojas.get(i).getCur_pos_x() + 1);
-                    new_son.setCur_pos_y(hojas.get(i).getCur_pos_y());
-                    new_son.setMov("up");
-                    pendientes.add(new_son);
-                }
-                if (moves.contains("6")) {
-                    id++;
-                    Nodo new_son = new Nodo(id, hojas.get(i).getId(), false);
-                    new_son.setCur_pos_x(hojas.get(i).getCur_pos_x());
-                    new_son.setCur_pos_y(hojas.get(i).getCur_pos_y() + 1);
-                    new_son.setMov("rigth");
-                    pendientes.add(new_son);
-                }
-                if (moves.contains("2")) {
-                    id++;
-                    Nodo new_son = new Nodo(id, hojas.get(i).getId(), false);
-                    new_son.setCur_pos_x(hojas.get(i).getCur_pos_x() - 1);
-                    new_son.setCur_pos_y(hojas.get(i).getCur_pos_y());
-                    new_son.setMov("down");
-                    pendientes.add(new_son);
-                }
-                if (moves.contains("4")) {
-                    id++;
-                    Nodo new_son = new Nodo(id, hojas.get(i).getId(), false);
-                    new_son.setCur_pos_x(hojas.get(i).getCur_pos_x());
-                    new_son.setCur_pos_y(hojas.get(i).getCur_pos_y() - 1);
-                    new_son.setMov("left");
-                    pendientes.add(new_son);
-                }
 
+        do {
+            String moves = aux.find_move(maze, hojas.get(0).getCur_pos_x(), hojas.get(0).getCur_pos_y());
+            if (moves.contains("8")) {
+                id++;
+                Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
+                new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() - 1);
+                new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
+                new_son.setMov("up");
+                if (new_son.getCur_pos_x() != hojas.get(0).getCur_pos_x() || new_son.getCur_pos_y() != hojas.get(0).getCur_pos_y()) {
+                    hojas.add(new_son);
+                }
             }
-            id++;
-            if (!(nod.getCur_pos_x() == aux.target_pos_x && nod.getCur_pos_y() == aux.target_pos_y)) {
+            if (moves.contains("6")) {
+                id++;
+                Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
+                new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
+                new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() + 1);
+                new_son.setMov("rigth");
+                if (new_son.getCur_pos_x() != hojas.get(0).getCur_pos_x() || new_son.getCur_pos_y() != hojas.get(0).getCur_pos_y()) {
+                    hojas.add(new_son);
+                }
+            }
+            if (moves.contains("2")) {
+                id++;
+                Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
+                new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() + 1);
+                new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
+                new_son.setMov("down");
+                if (new_son.getCur_pos_x() != hojas.get(0).getCur_pos_x() || new_son.getCur_pos_y() != hojas.get(0).getCur_pos_y()) {
+                    hojas.add(new_son);
+                }
+            }
+            if (moves.contains("4")) {
+                id++;
+                Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
+                new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
+                new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() - 1);
+                new_son.setMov("left");
+                if (new_son.getCur_pos_x() != hojas.get(0).getCur_pos_x() || new_son.getCur_pos_y() != hojas.get(0).getCur_pos_y()) {
+                    hojas.add(new_son);
+                }
+            }
+
+            arbol.add(hojas.get(0));
+            if (hojas.get(0).getCur_pos_x() == aux.target_pos_x && hojas.get(0).getCur_pos_y() == aux.target_pos_y) {
                 flag = false;
+               
             }
-        }
-
+            hojas.remove(0);
+            
+        } while (flag);
+        aux.traceRoute(arbol);
         /*
         String moves = aux.find_move(maze, nod.getCur_pos_x(), nod.getCur_pos_y());
         moves = moves.replaceAll("8", "up \n");
