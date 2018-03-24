@@ -12,7 +12,7 @@ import proyectoia.Nodo.*;
  *
  * @author juan
  */
-public class ProyectoIA {
+public class BusquedaNoInformada_Profundidad {
 
     int target_pos_x;
     int target_pos_y;
@@ -71,29 +71,33 @@ public class ProyectoIA {
         }
         return sol;
     }
-    void traceRoute(Vector <Nodo> camino){
+
+    void traceRoute(Vector<Nodo> camino) {
         int size = camino.size();
-        int id = camino.get(size-1).getId();
-         String route="";
-        for (int i = size-1; i >= 0; i--) {
-            if(camino.get(i).getId() == id && camino.get(i).getId()!=0){
-                id=camino.get(i).getParent_id();
-                route=camino.get(i).getMov() +"\n"+route;
-                
+        int id = camino.get(size - 1).getId();
+        String route = "";
+        for (int i = size - 1; i >= 0; i--) {
+            if (camino.get(i).getId() == id && camino.get(i).getId() != 0) {
+                id = camino.get(i).getParent_id();
+                route = camino.get(i).getMov() + "\n" + route;
+
             }
         }
         System.out.print(route);
-        
+
     }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ProyectoIA aux = new ProyectoIA();
+        BusquedaNoInformada_Amplitud aux = new BusquedaNoInformada_Amplitud();
         int id = 0;
         Nodo nod = new Nodo(id, id, false);
         Vector<Nodo> arbol = new Vector();
         Vector<Nodo> hojas = new Vector();
+        Vector<Nodo> hijos = new Vector();
+        Vector<Nodo> auxiliar = new Vector();
         hojas.add(nod);
         int maze[][] = {
             {0, 3, 0, 0, 0, 0, 1, 1, 0, 1},
@@ -117,55 +121,56 @@ public class ProyectoIA {
         Boolean flag = true;
 
         do {
-            String moves = aux.find_move(maze, hojas.get(0).getCur_pos_x(), hojas.get(0).getCur_pos_y());
-            if (moves.contains("8")) {
-                id++;
-                Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
-                new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() - 1);
-                new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
-                new_son.setMov("up");
-                if (new_son.getCur_pos_x() != hojas.get(0).getCur_pos_x() || new_son.getCur_pos_y() != hojas.get(0).getCur_pos_y()) {
-                    hojas.add(new_son);
-                }
-            }
-            if (moves.contains("6")) {
-                id++;
-                Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
-                new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
-                new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() + 1);
-                new_son.setMov("rigth");
-                if (new_son.getCur_pos_x() != hojas.get(0).getCur_pos_x() || new_son.getCur_pos_y() != hojas.get(0).getCur_pos_y()) {
-                    hojas.add(new_son);
-                }
-            }
-            if (moves.contains("2")) {
-                id++;
-                Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
-                new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() + 1);
-                new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
-                new_son.setMov("down");
-                if (new_son.getCur_pos_x() != hojas.get(0).getCur_pos_x() || new_son.getCur_pos_y() != hojas.get(0).getCur_pos_y()) {
-                    hojas.add(new_son);
-                }
-            }
-            if (moves.contains("4")) {
-                id++;
-                Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
-                new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
-                new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() - 1);
-                new_son.setMov("left");
-                if (new_son.getCur_pos_x() != hojas.get(0).getCur_pos_x() || new_son.getCur_pos_y() != hojas.get(0).getCur_pos_y()) {
-                    hojas.add(new_son);
-                }
-            }
 
-            arbol.add(hojas.get(0));
             if (hojas.get(0).getCur_pos_x() == aux.target_pos_x && hojas.get(0).getCur_pos_y() == aux.target_pos_y) {
                 flag = false;
-               
+                arbol.add(hojas.get(0));
             }
-            hojas.remove(0);
-            
+            if (flag) {
+                String moves = aux.find_move(maze, hojas.get(0).getCur_pos_x(), hojas.get(0).getCur_pos_y());
+                if (moves.contains("8") && hojas.get(0).getMov() != "down") {
+                    id++;
+                    Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
+                    new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() - 1);
+                    new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
+                    new_son.setMov("up");
+                    hojas.add(new_son);
+                }
+                if (moves.contains("6") && hojas.get(0).getMov() != "left") {
+                    id++;
+                    Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
+                    new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
+                    new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() + 1);
+                    new_son.setMov("rigth");
+                    hojas.add(new_son);
+                }
+                if (moves.contains("2") && hojas.get(0).getMov() != "up") {
+                    id++;
+                    Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
+                    new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() + 1);
+                    new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
+                    new_son.setMov("down");
+                    hojas.add(new_son);
+                }
+                if (moves.contains("4") && hojas.get(0).getMov() != "rigth") {
+                    id++;
+                    Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
+                    new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
+                    new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() - 1);
+                    new_son.setMov("left");
+                    hojas.add(new_son);
+                }
+
+                arbol.add(hojas.get(0));
+                hojas.remove(0);
+                auxiliar.addAll(hojas);
+                hojas.clear();
+                hojas.addAll(hijos);
+                hojas.addAll(auxiliar);
+                auxiliar.clear();
+                hijos.clear();
+
+            }
         } while (flag);
         aux.traceRoute(arbol);
         /*

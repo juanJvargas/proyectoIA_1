@@ -10,19 +10,26 @@ package proyectoia;
  * @author juan
  */
 public class Nodo {
-    private int  id;
+
+    private int id;
     private int parent_id;
-    private boolean parent;
     private int cur_pos_x = 0;
     private int cur_pos_y = 0;
     private String mov;
-    
-    
-    
+    private int productividad = 0;
+
     public Nodo(int id, int parent_id, boolean parent) {
         this.id = id;
         this.parent_id = parent_id;
-        this.parent = parent;
+
+    }
+
+    public int getProductividad() {
+        return productividad;
+    }
+
+    public void setProductividad(int productividad) {
+        this.productividad = productividad;
     }
 
     public int getId() {
@@ -31,14 +38,6 @@ public class Nodo {
 
     public int getParent_id() {
         return parent_id;
-    }
-
-    public boolean isParent() {
-        return parent;
-    }
-
-    public void setParent(boolean parent) {
-        this.parent = parent;
     }
 
     public int getCur_pos_x() {
@@ -64,5 +63,5 @@ public class Nodo {
     public void setMov(String mov) {
         this.mov = mov;
     }
-    
+
 }
