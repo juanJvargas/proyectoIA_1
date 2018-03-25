@@ -91,7 +91,7 @@ public class BusquedaNoInformada_Profundidad {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        BusquedaNoInformada_Amplitud aux = new BusquedaNoInformada_Amplitud();
+        BusquedaNoInformada_Profundidad aux = new BusquedaNoInformada_Profundidad();
         int id = 0;
         Nodo nod = new Nodo(id, id, false);
         Vector<Nodo> arbol = new Vector();
@@ -134,7 +134,7 @@ public class BusquedaNoInformada_Profundidad {
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() - 1);
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
                     new_son.setMov("up");
-                    hojas.add(new_son);
+                    hijos.add(new_son);
                 }
                 if (moves.contains("6") && hojas.get(0).getMov() != "left") {
                     id++;
@@ -142,7 +142,7 @@ public class BusquedaNoInformada_Profundidad {
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() + 1);
                     new_son.setMov("rigth");
-                    hojas.add(new_son);
+                    hijos.add(new_son);
                 }
                 if (moves.contains("2") && hojas.get(0).getMov() != "up") {
                     id++;
@@ -150,7 +150,7 @@ public class BusquedaNoInformada_Profundidad {
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() + 1);
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
                     new_son.setMov("down");
-                    hojas.add(new_son);
+                    hijos.add(new_son);
                 }
                 if (moves.contains("4") && hojas.get(0).getMov() != "rigth") {
                     id++;
@@ -158,7 +158,7 @@ public class BusquedaNoInformada_Profundidad {
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() - 1);
                     new_son.setMov("left");
-                    hojas.add(new_son);
+                    hijos.add(new_son);
                 }
 
                 arbol.add(hojas.get(0));

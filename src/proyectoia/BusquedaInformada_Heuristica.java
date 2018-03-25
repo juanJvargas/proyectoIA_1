@@ -7,6 +7,7 @@ package proyectoia;
 
 import java.util.*;
 import proyectoia.Nodo.*;
+import java.math.*;
 
 /**
  *
@@ -87,17 +88,66 @@ public class BusquedaInformada_Heuristica {
 
     }
 
+    int manhatan_Distance(int pos_x, int pos_y) {
+        int respuesta = 0;
+        int diferencia_x = pos_x - target_pos_x;
+        int diferencia_y = pos_y - target_pos_y;
+        respuesta = Math.abs(diferencia_x) + Math.abs(diferencia_y);
+        return respuesta;
+    }
+
+    Vector organizar(Vector<Nodo> arreglo, Nodo new_nodo, int pos_ini, int pos_fin) {
+        Vector<Nodo> ini = new Vector();
+        Vector<Nodo> fin = new Vector();
+        int pos_busqueda = (int) ((pos_ini + pos_fin) / 2);
+        if (pos_ini != pos_fin && arreglo.size() > 1) {
+            //System.out.println(arreglo.size());
+            if (new_nodo.getProductividad() >= arreglo.get(pos_busqueda - 1).getProductividad()) {
+                organizar(arreglo, new_nodo, pos_busqueda, pos_fin);
+            } else {
+                organizar(arreglo, new_nodo, pos_ini, pos_busqueda);
+            }
+        } else if (arreglo.size() > 1) {
+            for (int i = 0; i <= pos_busqueda; i++) {
+                ini.add(arreglo.get(i));
+            }
+            for (int i = arreglo.size(); i > pos_busqueda; i--) {
+                Vector<Nodo> auxiliar = new Vector();
+                fin.clear();
+                fin.add(arreglo.get(i));
+                fin.addAll(auxiliar);
+            }
+            arreglo.clear();
+            arreglo.addAll(ini);
+            arreglo.add(new_nodo);
+            arreglo.addAll(fin);
+            ini.clear();
+            fin.clear();
+        } else if (arreglo.isEmpty()) {
+            arreglo.add(new_nodo);
+        } else if(arreglo.get(0).getProductividad()> new_nodo.getProductividad()){
+            fin.addAll(arreglo);
+            arreglo.clear();
+            arreglo.add(new_nodo);
+            arreglo.addAll(fin);
+            fin.clear();
+        }else{
+            arreglo.add(new_nodo);
+        }
+
+        return arreglo;
+    }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        BusquedaNoInformada_Amplitud aux = new BusquedaNoInformada_Amplitud();
+        BusquedaInformada_Heuristica aux = new BusquedaInformada_Heuristica();
         int id = 0;
         Nodo nod = new Nodo(id, id, false);
         Vector<Nodo> arbol = new Vector();
         Vector<Nodo> hojas = new Vector();
         Vector<Nodo> hijos = new Vector();
-        Vector<Nodo> auxiliar = new Vector();
         hojas.add(nod);
         int maze[][] = {
             {0, 3, 0, 0, 0, 0, 1, 1, 0, 1},
@@ -134,7 +184,8 @@ public class BusquedaInformada_Heuristica {
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() - 1);
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
                     new_son.setMov("up");
-                    hojas.add(new_son);
+                    new_son.setProductividad(aux.manhatan_Distance(new_son.getCur_pos_x(), new_son.getCur_pos_y()));
+                    hijos.add(new_son);
                 }
                 if (moves.contains("6") && hojas.get(0).getMov() != "left") {
                     id++;
@@ -142,7 +193,8 @@ public class BusquedaInformada_Heuristica {
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() + 1);
                     new_son.setMov("rigth");
-                    hojas.add(new_son);
+                    new_son.setProductividad(aux.manhatan_Distance(new_son.getCur_pos_x(), new_son.getCur_pos_y()));
+                    hijos.add(new_son);
                 }
                 if (moves.contains("2") && hojas.get(0).getMov() != "up") {
                     id++;
@@ -150,7 +202,8 @@ public class BusquedaInformada_Heuristica {
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() + 1);
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
                     new_son.setMov("down");
-                    hojas.add(new_son);
+                    new_son.setProductividad(aux.manhatan_Distance(new_son.getCur_pos_x(), new_son.getCur_pos_y()));
+                    hijos.add(new_son);
                 }
                 if (moves.contains("4") && hojas.get(0).getMov() != "rigth") {
                     id++;
@@ -158,16 +211,15 @@ public class BusquedaInformada_Heuristica {
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() - 1);
                     new_son.setMov("left");
-                    hojas.add(new_son);
+                    new_son.setProductividad(aux.manhatan_Distance(new_son.getCur_pos_x(), new_son.getCur_pos_y()));
+                    hijos.add(new_son);
                 }
 
                 arbol.add(hojas.get(0));
                 hojas.remove(0);
-                auxiliar.addAll(hojas);
-                hojas.clear();
-                hojas.addAll(hijos);
-                hojas.addAll(auxiliar);
-                auxiliar.clear();
+                for (int i = 0; i < hijos.size(); i++) {
+                    hojas = aux.organizar(hojas, hijos.get(i), 0, hojas.size());
+                }
                 hijos.clear();
 
             }
