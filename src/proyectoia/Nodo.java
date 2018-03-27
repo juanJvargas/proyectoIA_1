@@ -17,11 +17,29 @@ public class Nodo {
     private int cur_pos_y = 0;
     private String mov;
     private int productividad = 0;
+    private int coste = 0;
+    private int estado = 0;
 
-    public Nodo(int id, int parent_id, boolean parent) {
+    public Nodo(int id, int parent_id) {
         this.id = id;
         this.parent_id = parent_id;
 
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
+    }
+
+    public int getCoste() {
+        return coste;
+    }
+
+    public void setCoste(int coste) {
+        this.coste = coste;
     }
 
     public int getProductividad() {

@@ -91,9 +91,10 @@ public class BusquedaNoInformada_Profundidad {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        System.err.println("busqueda no informada por profundidad");
         BusquedaNoInformada_Profundidad aux = new BusquedaNoInformada_Profundidad();
         int id = 0;
-        Nodo nod = new Nodo(id, id, false);
+        Nodo nod = new Nodo(id, id);
         Vector<Nodo> arbol = new Vector();
         Vector<Nodo> hojas = new Vector();
         Vector<Nodo> hijos = new Vector();
@@ -130,7 +131,7 @@ public class BusquedaNoInformada_Profundidad {
                 String moves = aux.find_move(maze, hojas.get(0).getCur_pos_x(), hojas.get(0).getCur_pos_y());
                 if (moves.contains("8") && hojas.get(0).getMov() != "down") {
                     id++;
-                    Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
+                    Nodo new_son = new Nodo(id, hojas.get(0).getId());
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() - 1);
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
                     new_son.setMov("up");
@@ -138,7 +139,7 @@ public class BusquedaNoInformada_Profundidad {
                 }
                 if (moves.contains("6") && hojas.get(0).getMov() != "left") {
                     id++;
-                    Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
+                    Nodo new_son = new Nodo(id, hojas.get(0).getId());
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() + 1);
                     new_son.setMov("rigth");
@@ -146,7 +147,7 @@ public class BusquedaNoInformada_Profundidad {
                 }
                 if (moves.contains("2") && hojas.get(0).getMov() != "up") {
                     id++;
-                    Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
+                    Nodo new_son = new Nodo(id, hojas.get(0).getId());
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() + 1);
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
                     new_son.setMov("down");
@@ -154,7 +155,7 @@ public class BusquedaNoInformada_Profundidad {
                 }
                 if (moves.contains("4") && hojas.get(0).getMov() != "rigth") {
                     id++;
-                    Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
+                    Nodo new_son = new Nodo(id, hojas.get(0).getId());
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() - 1);
                     new_son.setMov("left");

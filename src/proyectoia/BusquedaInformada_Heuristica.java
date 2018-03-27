@@ -97,41 +97,25 @@ public class BusquedaInformada_Heuristica {
     }
 
     Vector organizar(Vector<Nodo> arreglo, Nodo new_nodo, int pos_ini, int pos_fin) {
-        Vector<Nodo> ini = new Vector();
-        Vector<Nodo> fin = new Vector();
         int pos_busqueda = (int) ((pos_ini + pos_fin) / 2);
         if (pos_ini != pos_fin && arreglo.size() > 1) {
             //System.out.println(arreglo.size());
-            if (new_nodo.getProductividad() >= arreglo.get(pos_busqueda - 1).getProductividad()) {
-                organizar(arreglo, new_nodo, pos_busqueda, pos_fin);
+            if (new_nodo.getProductividad() >= arreglo.get(pos_busqueda).getProductividad()) {
+                if (pos_ini == pos_fin - 1) {
+                    arreglo.add(pos_fin, new_nodo);
+                } else {
+                    organizar(arreglo, new_nodo, pos_busqueda, pos_fin);
+                }
             } else {
                 organizar(arreglo, new_nodo, pos_ini, pos_busqueda);
             }
         } else if (arreglo.size() > 1) {
-            for (int i = 0; i <= pos_busqueda; i++) {
-                ini.add(arreglo.get(i));
-            }
-            for (int i = arreglo.size(); i > pos_busqueda; i--) {
-                Vector<Nodo> auxiliar = new Vector();
-                fin.clear();
-                fin.add(arreglo.get(i));
-                fin.addAll(auxiliar);
-            }
-            arreglo.clear();
-            arreglo.addAll(ini);
-            arreglo.add(new_nodo);
-            arreglo.addAll(fin);
-            ini.clear();
-            fin.clear();
+            arreglo.add(pos_busqueda, new_nodo);
         } else if (arreglo.isEmpty()) {
             arreglo.add(new_nodo);
-        } else if(arreglo.get(0).getProductividad()> new_nodo.getProductividad()){
-            fin.addAll(arreglo);
-            arreglo.clear();
-            arreglo.add(new_nodo);
-            arreglo.addAll(fin);
-            fin.clear();
-        }else{
+        } else if (arreglo.get(0).getProductividad() > new_nodo.getProductividad()) {
+            arreglo.add(0, new_nodo);
+        } else {
             arreglo.add(new_nodo);
         }
 
@@ -142,9 +126,10 @@ public class BusquedaInformada_Heuristica {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        System.err.println("busqueda informada por heuristica");
         BusquedaInformada_Heuristica aux = new BusquedaInformada_Heuristica();
         int id = 0;
-        Nodo nod = new Nodo(id, id, false);
+        Nodo nod = new Nodo(id, id);
         Vector<Nodo> arbol = new Vector();
         Vector<Nodo> hojas = new Vector();
         Vector<Nodo> hijos = new Vector();
@@ -180,7 +165,7 @@ public class BusquedaInformada_Heuristica {
                 String moves = aux.find_move(maze, hojas.get(0).getCur_pos_x(), hojas.get(0).getCur_pos_y());
                 if (moves.contains("8") && hojas.get(0).getMov() != "down") {
                     id++;
-                    Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
+                    Nodo new_son = new Nodo(id, hojas.get(0).getId());
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() - 1);
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
                     new_son.setMov("up");
@@ -189,7 +174,7 @@ public class BusquedaInformada_Heuristica {
                 }
                 if (moves.contains("6") && hojas.get(0).getMov() != "left") {
                     id++;
-                    Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
+                    Nodo new_son = new Nodo(id, hojas.get(0).getId());
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() + 1);
                     new_son.setMov("rigth");
@@ -198,7 +183,7 @@ public class BusquedaInformada_Heuristica {
                 }
                 if (moves.contains("2") && hojas.get(0).getMov() != "up") {
                     id++;
-                    Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
+                    Nodo new_son = new Nodo(id, hojas.get(0).getId());
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() + 1);
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
                     new_son.setMov("down");
@@ -207,7 +192,7 @@ public class BusquedaInformada_Heuristica {
                 }
                 if (moves.contains("4") && hojas.get(0).getMov() != "rigth") {
                     id++;
-                    Nodo new_son = new Nodo(id, hojas.get(0).getId(), false);
+                    Nodo new_son = new Nodo(id, hojas.get(0).getId());
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() - 1);
                     new_son.setMov("left");
